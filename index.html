@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AetherSwap — Instant cross-chain token swaps. Non-custodial. Low fees. Deep liquidity.">
+    <title>AetherSwap — Cross-Chain DEX</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+</head>
+<body>
+
+    <!-- Ambient background orbs -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <!-- Particle canvas -->
+    <canvas id="particles"></canvas>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="#" class="logo">
+                <span class="logo-icon">⚡</span>
+                <span class="logo-text">AetherSwap</span>
+            </a>
+            <div class="nav-links" id="navLinks">
+                <a href="#swap">Swap</a>
+                <a href="#stats">Analytics</a>
+                <a href="#features">Features</a>
+                <a href="#how">How It Works</a>
+            </div>
+            <button class="btn btn-primary btn-sm" id="connectBtn">
+                <span class="wallet-dot"></span>
+                Connect Wallet
+            </button>
+            <button class="hamburger" id="hamburger" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero + Swap Widget -->
+    <header class="hero" id="swap">
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="hero-badge">
+                    <span class="pulse-dot"></span>
+                    Mainnet Live — 12 Chains Connected
+                </div>
+                <h1>Swap anything.<br><span class="gradient-text">Trust nothing.</span></h1>
+                <p class="hero-sub">
+                    Non-custodial, cross-chain token swaps with deep liquidity and sub-second settlement. Your keys, your crypto, zero intermediaries.
+                </p>
+                <div class="hero-cta">
+                    <button class="btn btn-primary" onclick="document.getElementById('swapCard').scrollIntoView({behavior:'smooth'})">
+                        Start Swapping
+                    </button>
+                    <button class="btn btn-ghost" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">
+                        Learn More →
+                    </button>
+                </div>
+                <div class="hero-trust">
+                    <div class="trust-item">
+                        <span class="trust-value" id="trustTvl">$0</span>
+                        <span class="trust-label">Total Value Locked</span>
+                    </div>
+                    <div class="trust-divider"></div>
+                    <div class="trust-item">
+                        <span class="trust-value" id="trustVolume">$0</span>
+                        <span class="trust-label">24h Volume</span>
+                    </div>
+                    <div class="trust-divider"></div>
+                    <div class="trust-item">
+                        <span class="trust-value" id="trustTrades">0</span>
+                        <span class="trust-label">Total Trades</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Swap Widget -->
+            <div class="swap-widget-wrap">
+                <div class="swap-card" id="swapCard">
+                    <div class="swap-header">
+                        <span class="swap-title">Swap</span>
+                        <div class="swap-settings">
+                            <button class="icon-btn" id="slippageBtn" title="Slippage Settings">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="3"/>
+                                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                                </svg>
+                            </button>
+                            <div class="slippage-popover" id="slippagePopover">
+                                <span class="popover-title">Slippage Tolerance</span>
+                                <div class="slippage-options">
+                                    <button class="slip-opt active" data-slip="0.1">0.1%</button>
+                                    <button class="slip-opt" data-slip="0.5">0.5%</button>
+                                    <button class="slip-opt" data-slip="1.0">1.0%</button>
+                                    <button class="slip-opt" data-slip="3.0">3.0%</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- From -->
+                    <div class="swap-field" id="fromField">
+                        <div class="swap-field-top">
+                            <span class="field-label">You Pay</span>
+                            <span class="field-balance">Balance: <span id="fromBalance">—</span></span>
+                        </div>
+                        <div class="swap-field-main">
+                            <input type="text" class="amount-input" id="fromAmount" placeholder="0.0" inputmode="decimal" autocomplete="off">
+                            <button class="token-select" id="fromTokenBtn">
+                                <img class="token-icon" id="fromTokenIcon" src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png" alt="ETH">
+                                <span id="fromTokenSymbol">ETH</span>
+                                <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+                            </button>
+                        </div>
+                        <div class="swap-field-bottom">
+                            <span class="usd-value" id="fromUsd">~$0.00</span>
+                        </div>
+                    </div>
+
+                    <!-- Flip Button -->
+                    <div class="swap-flip-wrap">
+                        <button class="swap-flip" id="flipBtn" title="Flip tokens">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- To -->
+                    <div class="swap-field" id="toField">
+                        <div class="swap-field-top">
+                            <span class="field-label">You Receive</span>
+                            <span class="field-balance">Balance: <span id="toBalance">—</span></span>
+                        </div>
+                        <div class="swap-field-main">
+                            <input type="text" class="amount-input" id="toAmount" placeholder="0.0" readonly inputmode="decimal">
+                            <button class="token-select" id="toTokenBtn">
+                                <img class="token-icon" id="toTokenIcon" src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xdAC17F958D2ee523a2206206994597C13D831ec7/logo.png" alt="USDT">
+                                <span id="toTokenSymbol">USDT</span>
+                                <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+                            </button>
+                        </div>
+                        <div class="swap-field-bottom">
+                            <span class="usd-value" id="toUsd">~$0.00</span>
+                        </div>
+                    </div>
+
+                    <!-- Route Info -->
+                    <div class="swap-route" id="swapRoute" style="display:none;">
+                        <div class="route-row">
+                            <span>Rate</span>
+                            <span id="rateDisplay">—</span>
+                        </div>
+                        <div class="route-row">
+                            <span>Price Impact</span>
+                            <span id="priceImpact" class="impact-good">—</span>
+                        </div>
+                        <div class="route-row">
+                            <span>Network Fee</span>
+                            <span id="networkFee">—</span>
+                        </div>
+                        <div class="route-row">
+                            <span>Route</span>
+                            <span id="routePath" class="route-path">ETH → USDT</span>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary btn-swap" id="swapBtn">Connect Wallet</button>
+
+                    <div class="swap-footer">
+                        <span class="swap-footer-text">🔒 Non-custodial · Audited by CertiK & OtterSec</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Stats Section -->
+    <section class="stats-section" id="stats">
+        <div class="container">
+            <h2 class="section-title">Protocol <span class="gradient-text">Analytics</span></h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">💎</div>
+                    <div class="stat-value counter" data-target="847" data-prefix="$" data-suffix="M">$0M</div>
+                    <div class="stat-label">Total Value Locked</div>
+                    <div class="stat-change positive">↑ 12.4% 24h</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-value counter" data-target="234" data-prefix="$" data-suffix="M">$0M</div>
+                    <div class="stat-label">24h Volume</div>
+                    <div class="stat-change positive">↑ 8.1% 24h</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🔄</div>
+                    <div class="stat-value counter" data-target="4821947" data-suffix="">0</div>
+                    <div class="stat-label">Total Swaps</div>
+                    <div class="stat-change positive">↑ 4,209 today</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⛓️</div>
+                    <div class="stat-value counter" data-target="12" data-suffix="">0</div>
+                    <div class="stat-label">Connected Chains</div>
+                    <div class="stat-change positive">+ Solana Q3</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🪙</div>
+                    <div class="stat-value counter" data-target="8421" data-suffix="">0</div>
+                    <div class="stat-label">Supported Tokens</div>
+                    <div class="stat-change positive">↑ 127 this week</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-value counter" data-target="394" data-suffix="K">0K</div>
+                    <div class="stat-label">Active Traders</div>
+                    <div class="stat-change positive">↑ 2,847 24h</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features-section" id="features">
+        <div class="container">
+            <h2 class="section-title">Why <span class="gradient-text">AetherSwap</span></h2>
+            <p class="section-sub">Built for degens. Designed for everyone.</p>
+            <div class="features-grid">
+                <div class="feature-card reveal">
+                    <div class="feature-glow"></div>
+                    <div class="feature-icon">⚡</div>
+                    <h3>Instant Settlement</h3>
+                    <p>Sub-second finality on native chain swaps. No waiting for confirmations across bridges. You click, it's done.</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-glow"></div>
+                    <div class="feature-icon">🔐</div>
+                    <h3>Non-Custodial</h3>
+                    <p>Your private keys never leave your wallet. We can't touch your funds. Ever. That's the whole point.</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-glow"></div>
+                    <div class="feature-icon">🌉</div>
+                    <h3>Cross-Chain Native</h3>
+                    <p>Swap BTC for ETH, SOL for BNB, or any combination across 12 connected chains without wrapped assets.</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-glow"></div>
+                    <div class="feature-icon">💧</div>
+                    <h3>Deep Liquidity</h3>
+                    <p>Aggregated liquidity from 40+ DEXs and market makers means you always get the best available price.</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-glow"></div>
+                    <div class="feature-icon">🛡️</div>
+                    <h3>MEV Protected</h3>
+                    <p>Private transaction routing prevents sandwich attacks and front-running. Your trade, your profit.</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-glow"></div>
+                    <div class="feature-icon">💸</div>
+                    <h3>Zero Hidden Fees</h3>
+                    <p>What you see is what you pay. Gas-optimized routing, transparent slippage, no surprise costs.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-section" id="how">
+        <div class="container">
+            <h2 class="section-title">How It <span class="gradient-text">Works</span></h2>
+            <div class="steps">
+                <div class="step reveal">
+                    <div class="step-number">01</div>
+                    <div class="step-content">
+                        <h3>Connect Your Wallet</h3>
+                        <p>MetaMask, WalletConnect, Ledger, Phantom, or any WalletConnect-compatible wallet. Takes 5 seconds.</p>
+                    </div>
+                </div>
+                <div class="step-line"></div>
+                <div class="step reveal">
+                    <div class="step-number">02</div>
+                    <div class="step-content">
+                        <h3>Select Tokens</h3>
+                        <p>Choose what you're swapping from and to. 8,400+ tokens across 12 chains. Search or paste a contract address.</p>
+                    </div>
+                </div>
+                <div class="step-line"></div>
+                <div class="step reveal">
+                    <div class="step-number">03</div>
+                    <div class="step-content">
+                        <h3>Confirm & Swap</h3>
+                        <p>Review the quote, adjust slippage if needed, confirm in your wallet. Tokens arrive in seconds.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Token Marquee -->
+    <section class="marquee-section">
+        <div class="marquee">
+            <div class="marquee-track">
+                <span class="marquee-item">₿ Bitcoin</span>
+                <span class="marquee-divider">◆</span>
+                <span class="marquee-item">Ξ Ethereum</span>
+                <span class="marquee-divider">◆</span>
+                <span class="marquee-item">◎ Solana</span>
+                <span class="marquee-divider">◆</span>
+                <span class="marquee-item">Ⓝ BNB</span>
+                <span class="marquee-divider">◆</span>
+                <span class="marquee-item">✕ Avalanche</span>
+                <span class="marquee-divider">◆</span>
+                <span class="marquee-item">▲ Polygon</span>
+                <span class="marquee-divider">◆</span>
+                <span class="marquee-item">● Arbitrum</span>
+                <span class="marquee-divider">◆</span>
+                <span class="marquee-item">✦ Optimism</span>
+                <span class="marquee-divider">◆</span>
+                <span class="marquee-item">⟠ Cosmos</span>
+                <span class="marquee-divider">◆</span>
+                <span class="marquee-item">⬡ DOT</span>
+                <span class="marquee-divider">◆</span>
+                <span class="marquee-item">₿ Bitcoin</span>
+                <span class="marquee-divider">◆</span>
+                <span class="marquee-item">Ξ Ethereum</span>
+                <span class="marquee-divider">◆</span>
+                <span class="marquee-item">◎ Solana</span>
+                <span class="marquee-divider">◆</span>
+                <span class="marquee-item">Ⓝ BNB</span>
+                <span class="marquee-divider">◆</span>
+                <span class="marquee-item">✕ Avalanche</span>
+                <span class="marquee-divider">◆</span>
+                <span class="marquee-item">▲ Polygon</span>
+                <span class="marquee-divider">◆</span>
+                <span class="marquee-item">● Arbitrum</span>
+                <span class="marquee-divider">◆</span>
+                <span class="marquee-item">✦ Optimism</span>
+                <span class="marquee-divider">◆</span>
+                <span class="marquee-item">⟠ Cosmos</span>
+                <span class="marquee-divider">◆</span>
+                <span class="marquee-item">⬡ DOT</span>
+                <span class="marquee-divider">◆</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-card reveal">
+                <h2>Ready to swap<br><span class="gradient-text">without limits?</span></h2>
+                <p>Join 394K+ traders who chose self-custody and cross-chain freedom.</p>
+                <button class="btn btn-primary btn-lg" onclick="document.getElementById('swapCard').scrollIntoView({behavior:'smooth'})">
+                    ⚡ Launch App
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="#" class="logo">
+                        <span class="logo-icon">⚡</span>
+                        <span class="logo-text">AetherSwap</span>
+                    </a>
+                    <p>Non-custodial cross-chain DEX. Your keys, your crypto, your freedom.</p>
+                    <div class="footer-social">
+                        <a href="#" title="Twitter / X">𝕏</a>
+                        <a href="#" title="Discord">💬</a>
+                        <a href="#" title="Telegram">✈️</a>
+                        <a href="#" title="GitHub">🐙</a>
+                        <a href="#" title="Medium">📝</a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Product</h4>
+                    <a href="#swap">Swap</a>
+                    <a href="#stats">Analytics</a>
+                    <a href="#">Liquidity Pools</a>
+                    <a href="#">Bridge</a>
+                    <a href="#">Perpetuals</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Developers</h4>
+                    <a href="#">Documentation</a>
+                    <a href="#">API Reference</a>
+                    <a href="#">Smart Contracts</a>
+                    <a href="#">Bug Bounty</a>
+                    <a href="#">GitHub</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <a href="#">About</a>
+                    <a href="#">Careers</a>
+                    <a href="#">Brand Kit</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Privacy Policy</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>© 2024 AetherSwap Labs. All rights reserved.</span>
+                <span class="footer-note">⚡ Built for degens, by degens. Not financial advice.</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Token Select Modal -->
+    <div class="modal-overlay" id="tokenModal">
+        <div class="modal">
+            <div class="modal-header">
+                <span>Select a Token</span>
+                <button class="modal-close" id="modalClose">✕</button>
+            </div>
+            <div class="modal-search">
+                <input type="text" id="tokenSearch" placeholder="Search name or paste address..." autocomplete="off">
+            </div>
+            <div class="token-list" id="tokenList">
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
