@@ -1,3 +1,6 @@
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,9 +12,85 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236366f1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolygon points='13 2 3 14 12 14 11 22 21 10 12 10 13 2'/%3E%3C/svg%3E">
 </head>
 <body>
+
+    <!-- SVG Icon Sprite -->
+    <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+        <symbol id="icon-bolt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+        </symbol>
+        <symbol id="icon-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </symbol>
+        <symbol id="icon-gem" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 3h12l4 6-10 13L2 9z"/>
+            <path d="M11 3 8 9l4 13 4-13-3-6"/>
+            <path d="M2 9h20"/>
+        </symbol>
+        <symbol id="icon-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="20" x2="12" y2="10"/>
+            <line x1="18" y1="20" x2="18" y2="4"/>
+            <line x1="6" y1="20" x2="6" y2="16"/>
+        </symbol>
+        <symbol id="icon-refresh" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="23 4 23 10 17 10"/>
+            <polyline points="1 20 1 14 7 14"/>
+            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+        </symbol>
+        <symbol id="icon-link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+        </symbol>
+        <symbol id="icon-coins" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="8" cy="8" r="6"/>
+            <path d="M18.09 10.37A6 6 0 1 1 10.34 18"/>
+            <path d="M7 6h1v4"/>
+            <path d="m16.71 13.88.7.71-2.82 2.82"/>
+        </symbol>
+        <symbol id="icon-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </symbol>
+        <symbol id="icon-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="2" y1="12" x2="22" y2="12"/>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+        </symbol>
+        <symbol id="icon-droplet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+        </symbol>
+        <symbol id="icon-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </symbol>
+        <symbol id="icon-percent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="5" x2="5" y2="19"/>
+            <circle cx="6.5" cy="6.5" r="2.5"/>
+            <circle cx="17.5" cy="17.5" r="2.5"/>
+        </symbol>
+        <symbol id="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+        </symbol>
+        <symbol id="icon-x" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+        </symbol>
+        <symbol id="icon-discord" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.058a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+        </symbol>
+        <symbol id="icon-telegram" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+        </symbol>
+        <symbol id="icon-github" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+        </symbol>
+        <symbol id="icon-medium" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M13.54 12a6.8 6.8 0 0 1-6.77 6.82A6.8 6.8 0 0 1 0 12a6.8 6.8 0 0 1 6.77-6.82A6.8 6.8 0 0 1 13.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.87 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75S24 8.83 24 12z"/>
+        </symbol>
+    </svg>
 
     <!-- Ambient background orbs -->
     <div class="orb orb-1"></div>
@@ -25,7 +104,7 @@
     <nav class="nav">
         <div class="nav-inner">
             <a href="#" class="logo">
-                <span class="logo-icon">⚡</span>
+                <svg class="logo-icon-svg"><use href="#icon-bolt"></use></svg>
                 <span class="logo-text">AetherSwap</span>
             </a>
             <div class="nav-links" id="navLinks">
@@ -176,7 +255,10 @@
                     <button class="btn btn-primary btn-swap" id="swapBtn">Connect Wallet</button>
 
                     <div class="swap-footer">
-                        <span class="swap-footer-text">🔒 Non-custodial · Audited by CertiK & OtterSec</span>
+                        <span class="swap-footer-text">
+                            <svg class="icon-inline"><use href="#icon-lock"></use></svg>
+                            Non-custodial · Audited by CertiK & OtterSec
+                        </span>
                     </div>
                 </div>
             </div>
@@ -189,37 +271,49 @@
             <h2 class="section-title">Protocol <span class="gradient-text">Analytics</span></h2>
             <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="stat-icon">💎</div>
+                    <div class="stat-icon">
+                        <svg class="stat-icon-svg"><use href="#icon-gem"></use></svg>
+                    </div>
                     <div class="stat-value counter" data-target="847" data-prefix="$" data-suffix="M">$0M</div>
                     <div class="stat-label">Total Value Locked</div>
                     <div class="stat-change positive">↑ 12.4% 24h</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-icon">📊</div>
+                    <div class="stat-icon">
+                        <svg class="stat-icon-svg"><use href="#icon-chart"></use></svg>
+                    </div>
                     <div class="stat-value counter" data-target="234" data-prefix="$" data-suffix="M">$0M</div>
                     <div class="stat-label">24h Volume</div>
                     <div class="stat-change positive">↑ 8.1% 24h</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-icon">🔄</div>
+                    <div class="stat-icon">
+                        <svg class="stat-icon-svg"><use href="#icon-refresh"></use></svg>
+                    </div>
                     <div class="stat-value counter" data-target="4821947" data-suffix="">0</div>
                     <div class="stat-label">Total Swaps</div>
                     <div class="stat-change positive">↑ 4,209 today</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-icon">⛓️</div>
+                    <div class="stat-icon">
+                        <svg class="stat-icon-svg"><use href="#icon-link"></use></svg>
+                    </div>
                     <div class="stat-value counter" data-target="12" data-suffix="">0</div>
                     <div class="stat-label">Connected Chains</div>
                     <div class="stat-change positive">+ Solana Q3</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-icon">🪙</div>
+                    <div class="stat-icon">
+                        <svg class="stat-icon-svg"><use href="#icon-coins"></use></svg>
+                    </div>
                     <div class="stat-value counter" data-target="8421" data-suffix="">0</div>
                     <div class="stat-label">Supported Tokens</div>
                     <div class="stat-change positive">↑ 127 this week</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-icon">👥</div>
+                    <div class="stat-icon">
+                        <svg class="stat-icon-svg"><use href="#icon-users"></use></svg>
+                    </div>
                     <div class="stat-value counter" data-target="394" data-suffix="K">0K</div>
                     <div class="stat-label">Active Traders</div>
                     <div class="stat-change positive">↑ 2,847 24h</div>
@@ -236,37 +330,49 @@
             <div class="features-grid">
                 <div class="feature-card reveal">
                     <div class="feature-glow"></div>
-                    <div class="feature-icon">⚡</div>
+                    <div class="feature-icon">
+                        <svg class="feature-icon-svg"><use href="#icon-bolt"></use></svg>
+                    </div>
                     <h3>Instant Settlement</h3>
                     <p>Sub-second finality on native chain swaps. No waiting for confirmations across bridges. You click, it's done.</p>
                 </div>
                 <div class="feature-card reveal">
                     <div class="feature-glow"></div>
-                    <div class="feature-icon">🔐</div>
+                    <div class="feature-icon">
+                        <svg class="feature-icon-svg"><use href="#icon-lock"></use></svg>
+                    </div>
                     <h3>Non-Custodial</h3>
                     <p>Your private keys never leave your wallet. We can't touch your funds. Ever. That's the whole point.</p>
                 </div>
                 <div class="feature-card reveal">
                     <div class="feature-glow"></div>
-                    <div class="feature-icon">🌉</div>
+                    <div class="feature-icon">
+                        <svg class="feature-icon-svg"><use href="#icon-globe"></use></svg>
+                    </div>
                     <h3>Cross-Chain Native</h3>
                     <p>Swap BTC for ETH, SOL for BNB, or any combination across 12 connected chains without wrapped assets.</p>
                 </div>
                 <div class="feature-card reveal">
                     <div class="feature-glow"></div>
-                    <div class="feature-icon">💧</div>
+                    <div class="feature-icon">
+                        <svg class="feature-icon-svg"><use href="#icon-droplet"></use></svg>
+                    </div>
                     <h3>Deep Liquidity</h3>
                     <p>Aggregated liquidity from 40+ DEXs and market makers means you always get the best available price.</p>
                 </div>
                 <div class="feature-card reveal">
                     <div class="feature-glow"></div>
-                    <div class="feature-icon">🛡️</div>
+                    <div class="feature-icon">
+                        <svg class="feature-icon-svg"><use href="#icon-shield"></use></svg>
+                    </div>
                     <h3>MEV Protected</h3>
                     <p>Private transaction routing prevents sandwich attacks and front-running. Your trade, your profit.</p>
                 </div>
                 <div class="feature-card reveal">
                     <div class="feature-glow"></div>
-                    <div class="feature-icon">💸</div>
+                    <div class="feature-icon">
+                        <svg class="feature-icon-svg"><use href="#icon-percent"></use></svg>
+                    </div>
                     <h3>Zero Hidden Fees</h3>
                     <p>What you see is what you pay. Gas-optimized routing, transparent slippage, no surprise costs.</p>
                 </div>
@@ -280,158 +386,4 @@
             <h2 class="section-title">How It <span class="gradient-text">Works</span></h2>
             <div class="steps">
                 <div class="step reveal">
-                    <div class="step-number">01</div>
-                    <div class="step-content">
-                        <h3>Connect Your Wallet</h3>
-                        <p>MetaMask, WalletConnect, Ledger, Phantom, or any WalletConnect-compatible wallet. Takes 5 seconds.</p>
-                    </div>
-                </div>
-                <div class="step-line"></div>
-                <div class="step reveal">
-                    <div class="step-number">02</div>
-                    <div class="step-content">
-                        <h3>Select Tokens</h3>
-                        <p>Choose what you're swapping from and to. 8,400+ tokens across 12 chains. Search or paste a contract address.</p>
-                    </div>
-                </div>
-                <div class="step-line"></div>
-                <div class="step reveal">
-                    <div class="step-number">03</div>
-                    <div class="step-content">
-                        <h3>Confirm & Swap</h3>
-                        <p>Review the quote, adjust slippage if needed, confirm in your wallet. Tokens arrive in seconds.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Token Marquee -->
-    <section class="marquee-section">
-        <div class="marquee">
-            <div class="marquee-track">
-                <span class="marquee-item">₿ Bitcoin</span>
-                <span class="marquee-divider">◆</span>
-                <span class="marquee-item">Ξ Ethereum</span>
-                <span class="marquee-divider">◆</span>
-                <span class="marquee-item">◎ Solana</span>
-                <span class="marquee-divider">◆</span>
-                <span class="marquee-item">Ⓝ BNB</span>
-                <span class="marquee-divider">◆</span>
-                <span class="marquee-item">✕ Avalanche</span>
-                <span class="marquee-divider">◆</span>
-                <span class="marquee-item">▲ Polygon</span>
-                <span class="marquee-divider">◆</span>
-                <span class="marquee-item">● Arbitrum</span>
-                <span class="marquee-divider">◆</span>
-                <span class="marquee-item">✦ Optimism</span>
-                <span class="marquee-divider">◆</span>
-                <span class="marquee-item">⟠ Cosmos</span>
-                <span class="marquee-divider">◆</span>
-                <span class="marquee-item">⬡ DOT</span>
-                <span class="marquee-divider">◆</span>
-                <span class="marquee-item">₿ Bitcoin</span>
-                <span class="marquee-divider">◆</span>
-                <span class="marquee-item">Ξ Ethereum</span>
-                <span class="marquee-divider">◆</span>
-                <span class="marquee-item">◎ Solana</span>
-                <span class="marquee-divider">◆</span>
-                <span class="marquee-item">Ⓝ BNB</span>
-                <span class="marquee-divider">◆</span>
-                <span class="marquee-item">✕ Avalanche</span>
-                <span class="marquee-divider">◆</span>
-                <span class="marquee-item">▲ Polygon</span>
-                <span class="marquee-divider">◆</span>
-                <span class="marquee-item">● Arbitrum</span>
-                <span class="marquee-divider">◆</span>
-                <span class="marquee-item">✦ Optimism</span>
-                <span class="marquee-divider">◆</span>
-                <span class="marquee-item">⟠ Cosmos</span>
-                <span class="marquee-divider">◆</span>
-                <span class="marquee-item">⬡ DOT</span>
-                <span class="marquee-divider">◆</span>
-            </div>
-        </div>
-    </section>
-
-    <!-- CTA -->
-    <section class="cta-section">
-        <div class="container">
-            <div class="cta-card reveal">
-                <h2>Ready to swap<br><span class="gradient-text">without limits?</span></h2>
-                <p>Join 394K+ traders who chose self-custody and cross-chain freedom.</p>
-                <button class="btn btn-primary btn-lg" onclick="document.getElementById('swapCard').scrollIntoView({behavior:'smooth'})">
-                    ⚡ Launch App
-                </button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-brand">
-                    <a href="#" class="logo">
-                        <span class="logo-icon">⚡</span>
-                        <span class="logo-text">AetherSwap</span>
-                    </a>
-                    <p>Non-custodial cross-chain DEX. Your keys, your crypto, your freedom.</p>
-                    <div class="footer-social">
-                        <a href="#" title="Twitter / X">𝕏</a>
-                        <a href="#" title="Discord">💬</a>
-                        <a href="#" title="Telegram">✈️</a>
-                        <a href="#" title="GitHub">🐙</a>
-                        <a href="#" title="Medium">📝</a>
-                    </div>
-                </div>
-                <div class="footer-col">
-                    <h4>Product</h4>
-                    <a href="#swap">Swap</a>
-                    <a href="#stats">Analytics</a>
-                    <a href="#">Liquidity Pools</a>
-                    <a href="#">Bridge</a>
-                    <a href="#">Perpetuals</a>
-                </div>
-                <div class="footer-col">
-                    <h4>Developers</h4>
-                    <a href="#">Documentation</a>
-                    <a href="#">API Reference</a>
-                    <a href="#">Smart Contracts</a>
-                    <a href="#">Bug Bounty</a>
-                    <a href="#">GitHub</a>
-                </div>
-                <div class="footer-col">
-                    <h4>Company</h4>
-                    <a href="#">About</a>
-                    <a href="#">Careers</a>
-                    <a href="#">Brand Kit</a>
-                    <a href="#">Terms of Service</a>
-                    <a href="#">Privacy Policy</a>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <span>© 2024 AetherSwap Labs. All rights reserved.</span>
-                <span class="footer-note">⚡ Built for degens, by degens. Not financial advice.</span>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Token Select Modal -->
-    <div class="modal-overlay" id="tokenModal">
-        <div class="modal">
-            <div class="modal-header">
-                <span>Select a Token</span>
-                <button class="modal-close" id="modalClose">✕</button>
-            </div>
-            <div class="modal-search">
-                <input type="text" id="tokenSearch" placeholder="Search name or paste address..." autocomplete="off">
-            </div>
-            <div class="token-list" id="tokenList">
-            </div>
-        </div>
-    </div>
-
-    <script src="script.js"></script>
-</body>
-</html>
+                    <div
