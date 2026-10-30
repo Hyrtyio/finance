@@ -1,18 +1,15 @@
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="AetherSwap — Instant cross-chain token swaps. Non-custodial. Low fees. Deep liquidity.">
-    <title>AetherSwap — Cross-Chain DEX</title>
+    <meta name="description" content="KeroSwap — Instant cross-chain token swaps. Non-custodial. Deep liquidity. Zero intermediaries.">
+    <title>KeroSwap — Cross-Chain DEX Aggregator</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236366f1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolygon points='13 2 3 14 12 14 11 22 21 10 12 10 13 2'/%3E%3C/svg%3E">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ef4444' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolygon points='13 2 3 14 12 14 11 22 21 10 12 10 13 2'/%3E%3C/svg%3E">
 </head>
 <body>
 
@@ -61,9 +58,6 @@
             <line x1="2" y1="12" x2="22" y2="12"/>
             <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
         </symbol>
-        <symbol id="icon-droplet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
-        </symbol>
         <symbol id="icon-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
         </symbol>
@@ -75,7 +69,16 @@
         <symbol id="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="20 6 9 17 4 12"/>
         </symbol>
-        <symbol id="icon-x" viewBox="0 0 24 24" fill="currentColor">
+        <symbol id="icon-arrow-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="19" x2="12" y2="5"/>
+            <polyline points="5 12 12 5 19 12"/>
+        </symbol>
+        <symbol id="icon-layers" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+            <polyline points="2 17 12 22 22 17"/>
+            <polyline points="2 12 12 17 22 12"/>
+        </symbol>
+        <symbol id="icon-x-social" viewBox="0 0 24 24" fill="currentColor">
             <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
         </symbol>
         <symbol id="icon-discord" viewBox="0 0 24 24" fill="currentColor">
@@ -90,14 +93,44 @@
         <symbol id="icon-medium" viewBox="0 0 24 24" fill="currentColor">
             <path d="M13.54 12a6.8 6.8 0 0 1-6.77 6.82A6.8 6.8 0 0 1 0 12a6.8 6.8 0 0 1 6.77-6.82A6.8 6.8 0 0 1 13.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.87 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75S24 8.83 24 12z"/>
         </symbol>
+        <symbol id="icon-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </symbol>
+        <symbol id="icon-wallet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/>
+            <path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/>
+            <path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/>
+        </symbol>
+        <symbol id="icon-settings" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </symbol>
+        <symbol id="icon-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+        </symbol>
+        <symbol id="icon-external" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+            <polyline points="15 3 21 3 21 9"/>
+            <line x1="10" y1="14" x2="21" y2="3"/>
+        </symbol>
+        <symbol id="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+        </symbol>
+        <symbol id="icon-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="16" x2="12" y2="12"/>
+            <line x1="12" y1="8" x2="12.01" y2="8"/>
+        </symbol>
     </svg>
 
-    <!-- Ambient background orbs -->
+    <!-- Background layers -->
+    <div class="noise-overlay"></div>
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
     <div class="orb orb-3"></div>
-
-    <!-- Particle canvas -->
     <canvas id="particles"></canvas>
 
     <!-- Navigation -->
@@ -105,7 +138,7 @@
         <div class="nav-inner">
             <a href="#" class="logo">
                 <svg class="logo-icon-svg"><use href="#icon-bolt"></use></svg>
-                <span class="logo-text">AetherSwap</span>
+                <span class="logo-text">Kero<span class="logo-accent">Swap</span></span>
             </a>
             <div class="nav-links" id="navLinks">
                 <a href="#swap">Swap</a>
@@ -133,14 +166,15 @@
                 </div>
                 <h1>Swap anything.<br><span class="gradient-text">Trust nothing.</span></h1>
                 <p class="hero-sub">
-                    Non-custodial, cross-chain token swaps with deep liquidity and sub-second settlement. Your keys, your crypto, zero intermediaries.
+                    Non-custodial, cross-chain token swaps with aggregated liquidity from 40+ sources. Your keys, your crypto, zero intermediaries.
                 </p>
                 <div class="hero-cta">
                     <button class="btn btn-primary" onclick="document.getElementById('swapCard').scrollIntoView({behavior:'smooth'})">
+                        <svg class="btn-icon"><use href="#icon-bolt"></use></svg>
                         Start Swapping
                     </button>
                     <button class="btn btn-ghost" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">
-                        Learn More →
+                        Learn More
                     </button>
                 </div>
                 <div class="hero-trust">
@@ -168,10 +202,7 @@
                         <span class="swap-title">Swap</span>
                         <div class="swap-settings">
                             <button class="icon-btn" id="slippageBtn" title="Slippage Settings">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <circle cx="12" cy="12" r="3"/>
-                                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-                                </svg>
+                                <svg width="16" height="16" viewBox="0 0 24 24"><use href="#icon-settings"/></svg>
                             </button>
                             <div class="slippage-popover" id="slippagePopover">
                                 <span class="popover-title">Slippage Tolerance</span>
@@ -194,7 +225,7 @@
                         <div class="swap-field-main">
                             <input type="text" class="amount-input" id="fromAmount" placeholder="0.0" inputmode="decimal" autocomplete="off">
                             <button class="token-select" id="fromTokenBtn">
-                                <img class="token-icon" id="fromTokenIcon" src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png" alt="ETH">
+                                <img class="token-icon" id="fromTokenIcon" src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png" alt="ETH" onerror="this.style.display='none'">
                                 <span id="fromTokenSymbol">ETH</span>
                                 <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
                             </button>
@@ -204,7 +235,7 @@
                         </div>
                     </div>
 
-                    <!-- Flip Button -->
+                    <!-- Flip -->
                     <div class="swap-flip-wrap">
                         <button class="swap-flip" id="flipBtn" title="Flip tokens">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -222,7 +253,7 @@
                         <div class="swap-field-main">
                             <input type="text" class="amount-input" id="toAmount" placeholder="0.0" readonly inputmode="decimal">
                             <button class="token-select" id="toTokenBtn">
-                                <img class="token-icon" id="toTokenIcon" src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xdAC17F958D2ee523a2206206994597C13D831ec7/logo.png" alt="USDT">
+                                <img class="token-icon" id="toTokenIcon" src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xdAC17F958D2ee523a2206206994597C13D831ec7/logo.png" alt="USDT" onerror="this.style.display='none'">
                                 <span id="toTokenSymbol">USDT</span>
                                 <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
                             </button>
@@ -264,59 +295,155 @@
             </div>
         </div>
     </header>
+    <!-- Liquidity Sources Marquee -->
+    <section class="marquee-section">
+        <div class="marquee">
+            <div class="marquee-track">
+                <span class="marquee-item">Uniswap</span>
+                <span class="marquee-sep">/</span>
+                <span class="marquee-item">Curve</span>
+                <span class="marquee-sep">/</span>
+                <span class="marquee-item">Balancer</span>
+                <span class="marquee-sep">/</span>
+                <span class="marquee-item">PancakeSwap</span>
+                <span class="marquee-sep">/</span>
+                <span class="marquee-item">SushiSwap</span>
+                <span class="marquee-sep">/</span>
+                <span class="marquee-item">1inch</span>
+                <span class="marquee-sep">/</span>
+                <span class="marquee-item">Camelot</span>
+                <span class="marquee-sep">/</span>
+                <span class="marquee-item">Maverick</span>
+                <span class="marquee-sep">/</span>
+                <span class="marquee-item">Trader Joe</span>
+                <span class="marquee-sep">/</span>
+                <span class="marquee-item">QuickSwap</span>
+                <span class="marquee-sep">/</span>
+                <span class="marquee-item">Radiant</span>
+                <span class="marquee-sep">/</span>
+                <span class="marquee-item">Uniswap</span>
+                <span class="marquee-sep">/</span>
+                <span class="marquee-item">Curve</span>
+                <span class="marquee-sep">/</span>
+                <span class="marquee-item">Balancer</span>
+                <span class="marquee-sep">/</span>
+                <span class="marquee-item">PancakeSwap</span>
+                <span class="marquee-sep">/</span>
+                <span class="marquee-item">SushiSwap</span>
+                <span class="marquee-sep">/</span>
+                <span class="marquee-item">1inch</span>
+                <span class="marquee-sep">/</span>
+                <span class="marquee-item">Camelot</span>
+                <span class="marquee-sep">/</span>
+                <span class="marquee-item">Maverick</span>
+                <span class="marquee-sep">/</span>
+                <span class="marquee-item">Trader Joe</span>
+                <span class="marquee-sep">/</span>
+                <span class="marquee-item">QuickSwap</span>
+                <span class="marquee-sep">/</span>
+                <span class="marquee-item">Radiant</span>
+                <span class="marquee-sep">/</span>
+            </div>
+        </div>
+    </section>
 
     <!-- Stats Section -->
     <section class="stats-section" id="stats">
         <div class="container">
-            <h2 class="section-title">Protocol <span class="gradient-text">Analytics</span></h2>
+            <div class="section-header">
+                <span class="section-tag">Analytics</span>
+                <h2 class="section-title">The numbers don't lie</h2>
+                <p class="section-sub">Real-time protocol metrics, on-chain and verifiable</p>
+            </div>
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-icon">
-                        <svg class="stat-icon-svg"><use href="#icon-gem"></use></svg>
+                        <svg class="stat-icon-svg"><use href="#icon-lock"></use></svg>
                     </div>
-                    <div class="stat-value counter" data-target="847" data-prefix="$" data-suffix="M">$0M</div>
-                    <div class="stat-label">Total Value Locked</div>
-                    <div class="stat-change positive">↑ 12.4% 24h</div>
+                    <span class="stat-value" id="statTvl">$0</span>
+                    <span class="stat-label">Total Value Locked</span>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon">
                         <svg class="stat-icon-svg"><use href="#icon-chart"></use></svg>
                     </div>
-                    <div class="stat-value counter" data-target="234" data-prefix="$" data-suffix="M">$0M</div>
-                    <div class="stat-label">24h Volume</div>
-                    <div class="stat-change positive">↑ 8.1% 24h</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <svg class="stat-icon-svg"><use href="#icon-refresh"></use></svg>
-                    </div>
-                    <div class="stat-value counter" data-target="4821947" data-suffix="">0</div>
-                    <div class="stat-label">Total Swaps</div>
-                    <div class="stat-change positive">↑ 4,209 today</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <svg class="stat-icon-svg"><use href="#icon-link"></use></svg>
-                    </div>
-                    <div class="stat-value counter" data-target="12" data-suffix="">0</div>
-                    <div class="stat-label">Connected Chains</div>
-                    <div class="stat-change positive">+ Solana Q3</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <svg class="stat-icon-svg"><use href="#icon-coins"></use></svg>
-                    </div>
-                    <div class="stat-value counter" data-target="8421" data-suffix="">0</div>
-                    <div class="stat-label">Supported Tokens</div>
-                    <div class="stat-change positive">↑ 127 this week</div>
+                    <span class="stat-value" id="statVolume">$0</span>
+                    <span class="stat-label">24h Volume</span>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon">
                         <svg class="stat-icon-svg"><use href="#icon-users"></use></svg>
                     </div>
-                    <div class="stat-value counter" data-target="394" data-suffix="K">0K</div>
-                    <div class="stat-label">Active Traders</div>
-                    <div class="stat-change positive">↑ 2,847 24h</div>
+                    <span class="stat-value" id="statTraders">0</span>
+                    <span class="stat-label">Active Traders</span>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <svg class="stat-icon-svg"><use href="#icon-refresh"></use></svg>
+                    </div>
+                    <span class="stat-value" id="statSwaps">0</span>
+                    <span class="stat-label">Total Swaps</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Supported Chains -->
+    <section class="chains-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Networks</span>
+                <h2 class="section-title">12 chains. One swap.</h2>
+                <p class="section-sub">Native cross-chain routing across every major network</p>
+            </div>
+            <div class="chains-grid">
+                <div class="chain-card">
+                    <img class="chain-icon" src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png" alt="Ethereum" loading="lazy" onerror="this.style.display='none'">
+                    <span class="chain-name">Ethereum</span>
+                </div>
+                <div class="chain-card">
+                    <img class="chain-icon" src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/binance/info/logo.png" alt="BNB Chain" loading="lazy" onerror="this.style.display='none'">
+                    <span class="chain-name">BNB Chain</span>
+                </div>
+                <div class="chain-card">
+                    <img class="chain-icon" src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/polygon/info/logo.png" alt="Polygon" loading="lazy" onerror="this.style.display='none'">
+                    <span class="chain-name">Polygon</span>
+                </div>
+                <div class="chain-card">
+                    <img class="chain-icon" src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/avalanche/info/logo.png" alt="Avalanche" loading="lazy" onerror="this.style.display='none'">
+                    <span class="chain-name">Avalanche</span>
+                </div>
+                <div class="chain-card">
+                    <img class="chain-icon" src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/arbitrum/info/logo.png" alt="Arbitrum" loading="lazy" onerror="this.style.display='none'">
+                    <span class="chain-name">Arbitrum</span>
+                </div>
+                <div class="chain-card">
+                    <img class="chain-icon" src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/optimism/info/logo.png" alt="Optimism" loading="lazy" onerror="this.style.display='none'">
+                    <span class="chain-name">Optimism</span>
+                </div>
+                <div class="chain-card">
+                    <img class="chain-icon" src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/base/info/logo.png" alt="Base" loading="lazy" onerror="this.style.display='none'">
+                    <span class="chain-name">Base</span>
+                </div>
+                <div class="chain-card">
+                    <img class="chain-icon" src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/solana/info/logo.png" alt="Solana" loading="lazy" onerror="this.style.display='none'">
+                    <span class="chain-name">Solana</span>
+                </div>
+                <div class="chain-card">
+                    <img class="chain-icon" src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/fantom/info/logo.png" alt="Fantom" loading="lazy" onerror="this.style.display='none'">
+                    <span class="chain-name">Fantom</span>
+                </div>
+                <div class="chain-card">
+                    <img class="chain-icon" src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/klaytn/info/logo.png" alt="Klaytn" loading="lazy" onerror="this.style.display='none'">
+                    <span class="chain-name">Klaytn</span>
+                </div>
+                <div class="chain-card">
+                    <img class="chain-icon" src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/cronos/info/logo.png" alt="Cronos" loading="lazy" onerror="this.style.display='none'">
+                    <span class="chain-name">Cronos</span>
+                </div>
+                <div class="chain-card">
+                    <img class="chain-icon" src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/zksync/info/logo.png" alt="zkSync" loading="lazy" onerror="this.style.display='none'">
+                    <span class="chain-name">zkSync</span>
                 </div>
             </div>
         </div>
@@ -325,56 +452,65 @@
     <!-- Features -->
     <section class="features-section" id="features">
         <div class="container">
-            <h2 class="section-title">Why <span class="gradient-text">AetherSwap</span></h2>
-            <p class="section-sub">Built for degens. Designed for everyone.</p>
+            <div class="section-header">
+                <span class="section-tag">Features</span>
+                <h2 class="section-title">Built different</h2>
+                <p class="section-sub">Everything a DEX aggregator should be, nothing it shouldn't</p>
+            </div>
             <div class="features-grid">
-                <div class="feature-card reveal">
-                    <div class="feature-glow"></div>
+                <div class="feature-card">
                     <div class="feature-icon">
-                        <svg class="feature-icon-svg"><use href="#icon-bolt"></use></svg>
+                        <svg class="feature-icon-svg"><use href="#icon-layers"></use></svg>
                     </div>
-                    <h3>Instant Settlement</h3>
-                    <p>Sub-second finality on native chain swaps. No waiting for confirmations across bridges. You click, it's done.</p>
+                    <h3 class="feature-title">Smart Order Routing</h3>
+                    <p class="feature-desc">
+                        Aggregates liquidity across 40+ DEXs and splits your order across multiple venues to guarantee the best possible execution price.
+                    </p>
                 </div>
-                <div class="feature-card reveal">
-                    <div class="feature-glow"></div>
-                    <div class="feature-icon">
-                        <svg class="feature-icon-svg"><use href="#icon-lock"></use></svg>
-                    </div>
-                    <h3>Non-Custodial</h3>
-                    <p>Your private keys never leave your wallet. We can't touch your funds. Ever. That's the whole point.</p>
-                </div>
-                <div class="feature-card reveal">
-                    <div class="feature-glow"></div>
-                    <div class="feature-icon">
-                        <svg class="feature-icon-svg"><use href="#icon-globe"></use></svg>
-                    </div>
-                    <h3>Cross-Chain Native</h3>
-                    <p>Swap BTC for ETH, SOL for BNB, or any combination across 12 connected chains without wrapped assets.</p>
-                </div>
-                <div class="feature-card reveal">
-                    <div class="feature-glow"></div>
-                    <div class="feature-icon">
-                        <svg class="feature-icon-svg"><use href="#icon-droplet"></use></svg>
-                    </div>
-                    <h3>Deep Liquidity</h3>
-                    <p>Aggregated liquidity from 40+ DEXs and market makers means you always get the best available price.</p>
-                </div>
-                <div class="feature-card reveal">
-                    <div class="feature-glow"></div>
+                <div class="feature-card">
                     <div class="feature-icon">
                         <svg class="feature-icon-svg"><use href="#icon-shield"></use></svg>
                     </div>
-                    <h3>MEV Protected</h3>
-                    <p>Private transaction routing prevents sandwich attacks and front-running. Your trade, your profit.</p>
+                    <h3 class="feature-title">Non-Custodial</h3>
+                    <p class="feature-desc">
+                        Your keys never leave your wallet. KeroSwap is a routing layer — we never hold, touch, or access your funds at any point.
+                    </p>
                 </div>
-                <div class="feature-card reveal">
-                    <div class="feature-glow"></div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg class="feature-icon-svg"><use href="#icon-bolt"></use></svg>
+                    </div>
+                    <h3 class="feature-title">Zero MEV Protection</h3>
+                    <p class="feature-desc">
+                        Private transaction submission protects your swaps from sandwich attacks and frontrunning bots. Your trade, your profit.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg class="feature-icon-svg"><use href="#icon-globe"></use></svg>
+                    </div>
+                    <h3 class="feature-title">Cross-Chain Native</h3>
+                    <p class="feature-desc">
+                        Bridge and swap in a single transaction. Move assets between 12 chains without leaving the interface or paying double fees.
+                    </p>
+                </div>
+                <div class="feature-card">
                     <div class="feature-icon">
                         <svg class="feature-icon-svg"><use href="#icon-percent"></use></svg>
                     </div>
-                    <h3>Zero Hidden Fees</h3>
-                    <p>What you see is what you pay. Gas-optimized routing, transparent slippage, no surprise costs.</p>
+                    <h3 class="feature-title">Best Rates Guaranteed</h3>
+                    <p class="feature-desc">
+                        We compare every quote in real-time. If a better route exists anywhere on-chain, we find it and route through it.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg class="feature-icon-svg"><use href="#icon-gem"></use></svg>
+                    </div>
+                    <h3 class="feature-title">Gas Optimized</h3>
+                    <p class="feature-desc">
+                        Batched settlements, gasless approvals, and meta-transactions reduce overall swap cost by up to 40% compared to direct DEX calls.
+                    </p>
                 </div>
             </div>
         </div>
@@ -383,7 +519,145 @@
     <!-- How It Works -->
     <section class="how-section" id="how">
         <div class="container">
-            <h2 class="section-title">How It <span class="gradient-text">Works</span></h2>
+            <div class="section-header">
+                <span class="section-tag">How It Works</span>
+                <h2 class="section-title">Three steps. That's it.</h2>
+            </div>
             <div class="steps">
-                <div class="step reveal">
-                    <div
+                <div class="step">
+                    <div class="step-number">01</div>
+                    <div class="step-content">
+                        <h3 class="step-title">Connect your wallet</h3>
+                        <p class="step-desc">MetaMask, WalletConnect, Coinbase Wallet, Rabby, or any EIP-1193 compatible wallet. Two clicks, zero setup.</p>
+                    </div>
+                </div>
+                <div class="step-line"></div>
+                <div class="step">
+                    <div class="step-number">02</div>
+                    <div class="step-content">
+                        <h3 class="step-title">Select tokens & amount</h3>
+                        <p class="step-desc">Pick any token pair across any supported chain. We fetch quotes from every liquidity source in parallel.</p>
+                    </div>
+                </div>
+                <div class="step-line"></div>
+                <div class="step">
+                    <div class="step-number">03</div>
+                    <div class="step-content">
+                        <h3 class="step-title">Confirm & swap</h3>
+                        <p class="step-desc">Review the route, price impact, and fees. Sign once. The smart router executes across the optimal path.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-card">
+                <div class="cta-glow"></div>
+                <h2 class="cta-title">Ready to swap<br><span class="gradient-text">the right way?</span></h2>
+                <p class="cta-sub">Join 2M+ traders who already get better execution through KeroSwap</p>
+                <div class="cta-buttons">
+                    <button class="btn btn-primary btn-lg" onclick="document.getElementById('swapCard').scrollIntoView({behavior:'smooth'})">
+                        <svg class="btn-icon"><use href="#icon-bolt"></use></svg>
+                        Launch App
+                    </button>
+                    <button class="btn btn-ghost btn-lg" id="ctaDocsBtn">
+                        Read Docs
+                        <svg class="btn-icon"><use href="#icon-external"></use></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="#" class="logo">
+                        <svg class="logo-icon-svg"><use href="#icon-bolt"></use></svg>
+                        <span class="logo-text">Kero<span class="logo-accent">Swap</span></span>
+                    </a>
+                    <p class="footer-desc">
+                        The non-custodial DEX aggregator. Best rates across 12 chains, 40+ liquidity sources, zero intermediaries.
+                    </p>
+                    <div class="footer-social">
+                        <a href="#" class="social-link" aria-label="X">
+                            <svg class="social-icon"><use href="#icon-x-social"></use></svg>
+                        </a>
+                        <a href="#" class="social-link" aria-label="Discord">
+                            <svg class="social-icon"><use href="#icon-discord"></use></svg>
+                        </a>
+                        <a href="#" class="social-link" aria-label="Telegram">
+                            <svg class="social-icon"><use href="#icon-telegram"></use></svg>
+                        </a>
+                        <a href="#" class="social-link" aria-label="GitHub">
+                            <svg class="social-icon"><use href="#icon-github"></use></svg>
+                        </a>
+                        <a href="#" class="social-link" aria-label="Medium">
+                            <svg class="social-icon"><use href="#icon-medium"></use></svg>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4 class="footer-heading">Product</h4>
+                    <a href="#swap" class="footer-link">Swap</a>
+                    <a href="#stats" class="footer-link">Analytics</a>
+                    <a href="#features" class="footer-link">Features</a>
+                    <a href="#how" class="footer-link">How It Works</a>
+                </div>
+                <div class="footer-col">
+                    <h4 class="footer-heading">Developers</h4>
+                    <a href="#" class="footer-link">Documentation</a>
+                    <a href="#" class="footer-link">API Reference</a>
+                    <a href="#" class="footer-link">Smart Contracts</a>
+                    <a href="#" class="footer-link">Bug Bounty</a>
+                </div>
+                <div class="footer-col">
+                    <h4 class="footer-heading">Resources</h4>
+                    <a href="#" class="footer-link">Audits</a>
+                    <a href="#" class="footer-link">Brand Kit</a>
+                    <a href="#" class="footer-link">Terms of Service</a>
+                    <a href="#" class="footer-link">Privacy Policy</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span class="footer-copyright">© 2025 KeroSwap. All rights reserved.</span>
+                <div class="footer-note">
+                    <svg class="icon-inline"><use href="#icon-shield"></use></svg>
+                    <span>Audited by CertiK & OtterSec</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Token Selector Modal -->
+    <div class="modal-overlay" id="tokenModal">
+        <div class="modal">
+            <div class="modal-header">
+                <span class="modal-title">Select a token</span>
+                <button class="icon-btn" id="modalClose" aria-label="Close">
+                    <svg width="18" height="18" viewBox="0 0 24 24"><use href="#icon-close"/></svg>
+                </button>
+            </div>
+            <div class="modal-search">
+                <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24"><use href="#icon-search"/></svg>
+                <input type="text" id="tokenSearch" placeholder="Search name or paste address" autocomplete="off">
+            </div>
+            <div class="token-list" id="tokenList">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <svg class="toast-icon"><use href="#icon-check"></use></svg>
+        <span class="toast-msg" id="toastMsg">Done</span>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
