@@ -1104,10 +1104,18 @@ function initEventListeners() {
     // Flip
     $('flipBtn').addEventListener('click', flipTokens);
 
-    // Token selectors
-    $('fromTokenBtn').addEventListener('click', () => openTokenModal('from'));
-    $('toTokenBtn').addEventListener('click', () => openTokenModal('to'));
+    // Token selectors — preventDefault kills the form-submit scroll
+    $('fromTokenBtn').addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        openTokenModal('from');
+    });
 
+    $('toTokenBtn').addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        openTokenModal('to');
+    });
     // Modal
     $('modalClose').addEventListener('click', closeTokenModal);
     $('tokenModal').addEventListener('click', (e) => {

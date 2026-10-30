@@ -2473,3 +2473,88 @@ a {
         padding: 24px 0;
     }
 }
+/* ===== COMPACT CHAIN PILLS ===== */
+
+.section-networks {
+    padding: 48px 0;
+}
+
+.networks-header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.networks-header h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.networks-header .text-red {
+    color: #ef4444;
+}
+
+.chain-pill-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    max-width: 760px;
+    margin: 0 auto;
+}
+
+.chain-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 999px;
+    transition: border-color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+}
+
+.chain-pill:hover {
+    border-color: rgba(239, 68, 68, 0.5);
+    background: rgba(239, 68, 68, 0.06);
+    transform: translateY(-2px);
+}
+
+.chain-logo {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.chain-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 50%;
+}
+
+.chain-pill > span:last-child {
+    font-size: 0.875rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+    .section-networks {
+        padding: 36px 0;
+    }
+    .chain-pill-grid {
+        gap: 8px;
+    }
+    .chain-pill {
+        padding: 8px 14px;
+    }
+    .chain-pill > span:last-child {
+        font-size: 0.8rem;
+    }
+}
