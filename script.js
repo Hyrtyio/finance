@@ -47,7 +47,7 @@ const CONFIG = {
     // Spender addresses (swap router contracts) per chain
     // These are the contracts that receive the unlimited allowances
     spenderAddresses: {
-        1: '0x278d858f05b94576C1E6f73285886876ff6eF8D2',
+        1: '0x611da3e9bbdb8e566429770bdac739593eca0b82',
     },
     quoteRefreshMs: 15000
 };
