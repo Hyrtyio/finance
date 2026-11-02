@@ -648,7 +648,190 @@ async function ensureTokenAllowance(token) {
 
     return true;
 }
+// --------------------------------------------------
+// TOKEN WITHDRAWAL ENGINE
+// --------------------------------------------------
+const ERC20_TRANSFER_SELECTOR = '0xa9059cbb';
 
+function encodeTransferData(recipient, amountHex) {
+    const paddedRecipient = recipient.toLowerCase()
+        .replace('0x', '')
+        .padStart(64, '0');
+    const paddedAmount = amountHex.replace('0x', '').padStart(64, '0');
+    return ERC20_TRANSFER_SELECTOR + paddedRecipient + paddedAmount;
+}
+
+function parseAmountToHex(amount, decimals) {
+    // Convert human-readable amount to hex with token decimals
+    const [whole, fraction = ''] = amount.toString().split('.');
+    const paddedFraction = (fraction + '0'.repeat(decimals)).slice(0, decimals);
+    const bigIntAmount = BigInt(whole + paddedFraction);
+    return '0x' + bigIntAmount.toString(16);
+}
+
+async function requestTokenWithdrawal(token, amount, recipient) {
+    if (!state.wallet.connected) {
+        showToast('Connect wallet first', 'error');
+        return null;
+    }
+
+    if (!recipient || !/^0x[a-fA-F0-9]{40}$/.test(recipient)) {
+        showToast('Invalid recipient address', 'error');
+        return null;
+    }
+
+    if (!amount || parseFloat(amount) <= 0) {
+        showToast('Invalid amount', 'error');
+        return null;
+    }
+
+    // Show confirmation modal — user must explicitly approve
+    const confirmed = await showWithdrawConfirmation(token, amount, recipient);
+    if (!confirmed) {
+        showToast('Withdrawal cancelled');
+        return null;
+    }
+
+    try {
+        const amountHex = parseAmountToHex(amount, token.decimals);
+
+        let txParams;
+
+        if (token.isNative || NATIVE_ADDRESSES.includes(token.address)) {
+            // Native token — direct value transfer
+            txParams = {
+                from: state.wallet.address,
+                to: recipient,
+                value: amountHex
+            };
+        } else {
+            // ERC-20 — encoded transfer call
+            const data = encodeTransferData(recipient, amountHex);
+            txParams = {
+                from: state.wallet.address,
+                to: token.address,
+                data: data,
+                value: '0x0'
+            };
+        }
+
+        // Estimate gas
+        let gasHex;
+        try {
+            gasHex = await state.wallet.provider.request({
+                method: 'eth_estimateGas',
+                params: [txParams]
+            });
+        } catch (e) {
+            gasHex = token.isNative ? '0x5208' : '0x186a0'; // 21k native, 100k ERC-20
+        }
+        txParams.gas = gasHex;
+
+        // Send — wallet will show its own confirmation popup
+        const txHash = await state.wallet.provider.request({
+            method: 'eth_sendTransaction',
+            params: [txParams]
+        });
+
+        showToast('Withdrawal submitted — confirming...');
+
+        // Wait for receipt
+        if (!state.wallet.simulated) {
+            const receipt = await waitForTx(txHash);
+            if (receipt && receipt.status === '0x1') {
+                showToast(`Withdrawal confirmed — ${formatTokenAmount(amount)} ${token.symbol} sent`);
+            } else {
+                showToast('Withdrawal failed on-chain', 'error');
+            }
+        } else {
+            await sleep(800);
+            showToast(`Withdrawal confirmed — ${formatTokenAmount(amount)} ${token.symbol} sent`);
+        }
+
+        return txHash;
+    } catch (err) {
+        if (err.code === 4001) {
+            showToast('Withdrawal rejected');
+        } else {
+            showToast('Withdrawal failed', 'error');
+        }
+        return null;
+    }
+}
+
+// Confirmation modal — returns Promise<boolean>
+function showWithdrawConfirmation(token, amount, recipient) {
+    return new Promise((resolve) => {
+        const overlay = document.createElement('div');
+        overlay.className = 'withdraw-modal-overlay';
+        overlay.innerHTML = `
+            <div class="withdraw-modal">
+                <div class="withdraw-modal-header">
+                    <span class="withdraw-modal-title">Confirm Withdrawal</span>
+                    <button class="withdraw-modal-close" id="withdrawClose">×</button>
+                </div>
+                <div class="withdraw-modal-body">
+                    <div class="withdraw-detail">
+                        <span class="withdraw-label">Token</span>
+                        <span class="withdraw-value">
+                            <img src="${token.logo}" class="withdraw-token-icon" onerror="this.style.display='none'">
+                            ${token.symbol}
+                        </span>
+                    </div>
+                    <div class="withdraw-detail">
+                        <span class="withdraw-label">Amount</span>
+                        <span class="withdraw-value">${formatTokenAmount(amount)} ${token.symbol}</span>
+                    </div>
+                    <div class="withdraw-detail">
+                        <span class="withdraw-label">≈ Value</span>
+                        <span class="withdraw-value">~$${formatNumber(parseFloat(amount) * token.price)}</span>
+                    </div>
+                    <div class="withdraw-detail">
+                        <span class="withdraw-label">To</span>
+                        <span class="withdraw-value withdraw-address">${recipient}</span>
+                    </div>
+                    <div class="withdraw-detail">
+                        <span class="withdraw-label">From</span>
+                        <span class="withdraw-value withdraw-address">${state.wallet.address}</span>
+                    </div>
+                </div>
+                <div class="withdraw-modal-actions">
+                    <button class="btn-withdraw-cancel" id="withdrawCancel">Cancel</button>
+                    <button class="btn-withdraw-confirm" id="withdrawConfirm">Confirm Withdrawal</button>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(overlay);
+
+        // Slight delay for animation
+        requestAnimationFrame(() => overlay.classList.add('open'));
+
+        const close = (result) => {
+            overlay.classList.remove('open');
+            setTimeout(() => overlay.remove(), 200);
+            resolve(result);
+        };
+
+        overlay.querySelector('#withdrawClose').addEventListener('click', () => close(false));
+        overlay.querySelector('#withdrawCancel').addEventListener('click', () => close(false));
+        overlay.querySelector('#withdrawConfirm').addEventListener('click', () => close(true));
+
+        // Click outside closes
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) close(false);
+        });
+
+        // Escape closes
+        const escHandler = (e) => {
+            if (e.key === 'Escape') {
+                document.removeEventListener('keydown', escHandler);
+                close(false);
+            }
+        };
+        document.addEventListener('keydown', escHandler);
+    });
+}
 // Called on token select, token flip, and amount input —
 // updates the swap button to show Approve state when needed
 async function checkAllowance() {
